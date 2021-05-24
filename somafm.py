@@ -32,7 +32,6 @@ def print_playlists(playlist):
         print(url)
 
 
-print('--- SomaFM Channels ---')
 response = get_channels(url)
 somafm_playlist = get_playlists(response.json())
 print_playlists(somafm_playlist)
