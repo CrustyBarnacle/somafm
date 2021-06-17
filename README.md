@@ -8,13 +8,13 @@ The script will print out (standard out) a list of the URLs for all of the SomaF
 ### Usage:
 
 HTTPS playlist (default)
-    `python somafm.py > myplaylist.pl`
+    `python somafm.py > soma_channels.pl`
 
 HTTP playlist
     `python3 somafm.py | sed 's/https/http/' > soma_channels_http.pl`
 
 
-### Example playlist:
+### Example HTTP playlist:
 
 ```
 http://api.somafm.com/7soul130.pls
