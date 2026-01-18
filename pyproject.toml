@@ -1,0 +1,22 @@
+[project]
+name = "somafm"
+version ="0.1.0"
+description = "SomaFM channel playlist fetcher"
+requires-python = ">=3.10"
+dependencies = [
+    "requests>=2.25.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "mypy",
+    "pytest",
+    "types-requests",
+]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
