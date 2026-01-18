@@ -1,11 +1,13 @@
 import requests # https://requests.readthedocs.io
 from requests.exceptions import HTTPError
+from typing import Any
 
 
 url = "https://somafm.com/channels.json"
 
 
-def get_channels(url): # Get list of SomaFM channels (json object)
+def get_channels(url: str) -> requests.Response | None:
+# Return list of SomaFM channels (json object)
     try:
         response = requests.get(url)
         response.raise_for_status()
@@ -19,7 +21,7 @@ def get_channels(url): # Get list of SomaFM channels (json object)
         print(f'Other error occured: {err}')
         return None
 
-def get_playlists(response):
+def get_playlists(response: dict[str, Any]) -> list[str]:
     channels = [] # Store channel playlists
     for channel in response['channels']:
         #print(f"{channel['title']} : {channel['description']}")
@@ -29,7 +31,7 @@ def get_playlists(response):
 
     return (channels)
 
-def print_playlists(playlist):
+def print_playlists(playlist: list[str]) -> None:
     for url in playlist:
         print(url)
 
