@@ -9,13 +9,15 @@ def get_channels(url): # Get list of SomaFM channels (json object)
     try:
         response = requests.get(url)
         response.raise_for_status()
+        return response
 
     except HTTPError as http_err:
         print(f'HTTP error occured:\n {http_err}')
+        return None
+
     except Exception as err:
         print(f'Other error occured: {err}')
-    
-    return response
+        return None
 
 def get_playlists(response):
     channels = [] # Store channel playlists
@@ -32,6 +34,9 @@ def print_playlists(playlist):
         print(url)
 
 
-response = get_channels(url)
-somafm_playlist = get_playlists(response.json())
-print_playlists(somafm_playlist)
+if __name__ == "__main__":
+    response = get_channels(url)
+    if response is None:
+        exit(1)
+    somafm_playlist = get_playlists(response.json())
+    print_playlists(somafm_playlist)

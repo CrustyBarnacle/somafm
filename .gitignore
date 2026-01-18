@@ -1,3 +1,5 @@
 venv/
 credential.yml
 *.pl
+__pycache__/
+somafm.egg-info
