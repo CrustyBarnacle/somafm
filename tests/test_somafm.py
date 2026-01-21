@@ -5,26 +5,27 @@ from somafm import (
     get_channels,
     print_playlists
 )
-
+from models import Channel, Playlist
 from unittest.mock import patch, Mock
 import requests
 
 
 def test_get_playlists_returns_list() -> None:
     """Test that get_playlists extracts URLs correctly."""
-    sample_data = {
-        "channels": [
-            {
-                "title": "Drone Zone",
-                "playlists": [
-                    {"quality": "highest", "format": "aac", "url": "https://example.com/drone.pls"},
-                    {"quality": "low", "format": "mp3", "url": "https://example.com/drone-low.pls"},
-                ],
-            },
-        ]
-    }
+    channels = [
+        Channel(
+            id="drone",
+            title="Drone Zone",
+            description="Droning",
+            genre="ambient",
+            playlists=[
+                Playlist(url="https://example.com/drone.pls", format="aac", quality="highest"),         
+                Playlist(url="https://example.com/drone-low.pls", format="mp3", quality="low"),
+            ],
+        ),
+    ]
 
-    result = get_playlists(sample_data)
+    result = get_playlists(channels)
 
     assert isinstance(result, list)
     assert len(result) == 1
@@ -33,26 +34,27 @@ def test_get_playlists_returns_list() -> None:
 
 def test_get_playlists_empty_channels() -> None:
     """Test with empty channels list."""
-    result = get_playlists({"channels": []})
+    result = get_playlists([])
     assert result == []
 
 
 def test_get_playlists_filters_correctly() -> None:
     """Test that only highest quality AAC playlists are returned."""
-    sample_data = {
-        "channels": [
-            {
-                "title": "Test",
-                "playlists": [
-                    {"quality": "highest", "format": "aac", "url": "https://keep.pls"},
-                    {"quality": "highest", "format": "mp3", "url": "https://skip.pls"},
-                    {"quality": "low", "format": "aac", "url": "https://also-skip.pls"},
-                ],
-            }
-        ]
-    }
+    channels = [
+        Channel(
+            id="nosuch-channel",
+            title="No Such Channel",
+            description="Test No Such",
+            genre="test",
+            playlists=[
+                Playlist(url="https://keep.pls", format="aac", quality="highest"),                      
+                Playlist(url="https://skip.pls", format="mp3", quality="highest"),                      
+                Playlist(url="https://also-skip.pls", format="aac", quality="low"),
+            ],
+        ),
+    ]
 
-    result = get_playlists(sample_data)
+    result = get_playlists(channels)
 
     assert result == ["https://keep.pls"]
 
