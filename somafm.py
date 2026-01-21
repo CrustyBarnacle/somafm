@@ -1,7 +1,11 @@
 import requests # https://requests.readthedocs.io
 from requests.exceptions import HTTPError
 from typing import Any
-
+from models import (
+    Channel,
+    Playlist,
+    parse_channels
+)
 
 url = "https://somafm.com/channels.json"
 
@@ -21,15 +25,16 @@ def get_channels(url: str) -> requests.Response | None:
         print(f'Other error occured: {err}')
         return None
 
-def get_playlists(response: dict[str, Any]) -> list[str]:
-    channels = [] # Store channel playlists
-    for channel in response['channels']:
-        #print(f"{channel['title']} : {channel['description']}")
-        for playlist in channel['playlists']:
-            if playlist['quality'] == 'highest' and playlist['format'] == 'aac':
-                channels.append(f"{playlist['url']}")
 
-    return (channels)
+def get_playlists(channels: list[Channel]) -> list[str]:
+    """Select AAC (highest quality) playlist URLs from channels"""
+    playlists: list[str] = [] # Store channel playlists
+    for channel in channels:
+        for playlist in channel.playlists:
+            if playlist.quality == "highest" and playlist.format == 'aac':
+                playlists.append(playlist.url)
+    return playlists
+
 
 def print_playlists(playlist: list[str]) -> None:
     for url in playlist:
@@ -40,5 +45,6 @@ if __name__ == "__main__":
     response = get_channels(url)
     if response is None:
         exit(1)
-    somafm_playlist = get_playlists(response.json())
+    channels = parse_channels(response.json())
+    somafm_playlist = get_playlists(channels)
     print_playlists(somafm_playlist)
