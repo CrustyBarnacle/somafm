@@ -26,19 +26,19 @@ def get_channels(url: str) -> requests.Response | None:
         return None
 
 
-def get_playlists(channels: list[Channel]) -> list[str]:
+def get_playlists(channels: list[Channel]) -> list[Playlist]:
     """Select AAC (highest quality) playlist URLs from channels"""
-    playlists: list[str] = [] # Store channel playlists
+    playlists: list[Playlist] = [] # Store channel playlists
     for channel in channels:
         for playlist in channel.playlists:
             if playlist.quality == "highest" and playlist.format == 'aac':
-                playlists.append(playlist.url)
+                playlists.append(playlist)
     return playlists
 
 
-def print_playlists(playlist: list[str]) -> None:
-    for url in playlist:
-        print(url)
+def print_playlists(playlists: list[Playlist]) -> None:
+    for playlist in playlists:
+        print(playlist.url)
 
 
 if __name__ == "__main__":

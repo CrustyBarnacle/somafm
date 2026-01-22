@@ -29,7 +29,7 @@ def test_get_playlists_returns_list() -> None:
 
     assert isinstance(result, list)
     assert len(result) == 1
-    assert result[0] == "https://example.com/drone.pls"
+    assert result[0] == Playlist(url="https://example.com/drone.pls", format="aac", quality="highest")
 
 
 def test_get_playlists_empty_channels() -> None:
@@ -56,7 +56,7 @@ def test_get_playlists_filters_correctly() -> None:
 
     result = get_playlists(channels)
 
-    assert result == ["https://keep.pls"]
+    assert result == [Playlist(url="https://keep.pls", format="aac", quality="highest")]
 
 
 def test_get_channels_success() -> None:
@@ -91,7 +91,10 @@ def test_get_channels_http_error() -> None:
 
 def test_print_playlists_output(capsys) -> None:                                                        
     """Test that playlists are printed correctly."""                                                    
-    playlists = ["https://example.com/1.pls", "https://example.com/2.pls"]                              
+    playlists = [
+        Playlist(url="https://example.com/1.pls", format="aac", quality="highest"),
+        Playlist(url="https://example.com/2.pls", format="aac", quality="highest")
+        ]                              
                                                                                                         
     print_playlists(playlists)                                                                          
                                                                                                         
