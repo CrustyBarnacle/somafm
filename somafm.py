@@ -6,7 +6,15 @@ from models import (
     Playlist,
     parse_channels
 )
+from pathlib import Path
+from datetime import datetime, timedelta
+import json
+from typing import Any, cast
 
+
+CACHE_DIR = Path.home() / ".cache" / "somafm"
+CACHE_FILE = CACHE_DIR / "channels.json"
+CACHE_MAX_AGE = timedelta(hours=24)
 url = "https://somafm.com/channels.json"
 
 
@@ -25,6 +33,28 @@ def get_channels(url: str) -> requests.Response | None:
         print(f'Other error occured: {err}')
         return None
 
+def get_cached_channels() -> dict[str, Any] | None:
+    """Load from cache (unless expired), or return None"""
+    if not CACHE_FILE.exists():
+        return None
+    
+    # Check cache age
+    mtime = datetime.fromtimestamp(CACHE_FILE.stat().st_mtime)
+    if datetime.now() - mtime > CACHE_MAX_AGE:
+        return None # Stale cache
+    
+    try:
+        with CACHE_FILE.open() as f:
+            return cast(dict[str, Any], json.load(f))
+    except json.JSONDecodeError:
+        return None # Empty or corrupt cache
+
+def save_to_cache(data: dict[str, Any]) -> None:
+    """Save response to cache file"""
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    with CACHE_FILE.open("w") as f:
+        json.dump(data, f)
+
 
 def get_playlists(channels: list[Channel]) -> list[Playlist]:
     """Select AAC (highest quality) playlist URLs from channels"""
@@ -42,9 +72,15 @@ def print_playlists(playlists: list[Playlist]) -> None:
 
 
 if __name__ == "__main__":
-    response = get_channels(url)
-    if response is None:
-        exit(1)
-    channels = parse_channels(response.json())
+    channels_data = get_cached_channels()
+
+    if channels_data is None:
+        response = get_channels(url)
+        if response is None:
+            exit(1)
+        channels_data = response.json()
+        save_to_cache(channels_data)
+    
+    channels = parse_channels(channels_data)
     somafm_playlist = get_playlists(channels)
     print_playlists(somafm_playlist)
