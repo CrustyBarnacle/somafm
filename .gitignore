@@ -3,3 +3,4 @@ credential.yml
 *.pl
 __pycache__/
 somafm.egg-info
+CLAUDE.md
