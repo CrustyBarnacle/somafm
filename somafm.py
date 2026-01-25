@@ -14,7 +14,7 @@ import json
 CACHE_DIR = Path.home() / ".cache" / "somafm"
 CACHE_FILE = CACHE_DIR / "channels.json"
 CACHE_MAX_AGE = timedelta(hours=24)
-url = "https://somafm.com/channels.json"
+CHANNELS_URL = "https://somafm.com/channels.json"
 
 
 def get_channels(url: str) -> requests.Response | None:
