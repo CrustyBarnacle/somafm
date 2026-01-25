@@ -74,7 +74,7 @@ if __name__ == "__main__":
     channels_data = get_cached_channels()
 
     if channels_data is None:
-        response = get_channels(url)
+        response = get_channels(CHANNELS_URL)
         if response is None:
             exit(1)
         channels_data = response.json()
