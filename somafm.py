@@ -1,6 +1,6 @@
 import requests # https://requests.readthedocs.io
 from requests.exceptions import HTTPError
-from typing import Any
+from typing import Any, cast
 from models import (
     Channel,
     Playlist,
@@ -9,7 +9,6 @@ from models import (
 from pathlib import Path
 from datetime import datetime, timedelta
 import json
-from typing import Any, cast
 
 
 CACHE_DIR = Path.home() / ".cache" / "somafm"
