@@ -1,36 +1,36 @@
-# somafm
+## somafm.py - somaFM channel playlist generator for MPD
 
-Short Python script that grabs the SomaFM channels information from https://somafm.com/channels.json, and prints out a list of the highest quality aac format playlists. Useful for creating a playlist for your favorite stream-capable music player.
+# SomaFM MPD Playlist Generator
 
-The script will print out (standard out) a list of the URLs for all of the SomaFM radio stations.
+Fetches SomaFM channel data and generates a PLS playlist for use with MPD.
 
+## Requirements
 
-### Usage:
+- Python 3.10+
+- `requests` library
 
-HTTPS playlist (default)
-    `python somafm.py > soma_channels.pl`
-
-HTTP playlist
-    `python3 somafm.py | sed 's/https/http/' > soma_channels_http.pl`
-
-
-### Example HTTP playlist:
-
+## Installation
+```bash
+pip install requests
 ```
-http://api.somafm.com/7soul130.pls
-http://api.somafm.com/bagel130.pls
-http://api.somafm.com/beatblender130.pls
-http://api.somafm.com/bootliquor130.pls
-http://api.somafm.com/brfm130.pls
-http://api.somafm.com/cliqhop130.pls
-http://api.somafm.com/covers130.pls
-...
-http://api.somafm.com/u80s130.pls
-http://api.somafm.com/metal130.pls
-http://api.somafm.com/reggae130.pls
-http://api.somafm.com/scanner130.pls
-http://api.somafm.com/vaporwaves130.pls
-http://api.somafm.com/specials130.pls
-http://api.somafm.com/n5md130.pls
-http://api.somafm.com/synphaera130.pls
+
+## Usage
+```bash
+./somafm.py
 ```
+
+Generates a PLS playlist at `~/Music/Playlists/somaFM.pls`, creating the directory if it doesn't exist.
+
+## Configuration
+
+Edit the constants at the top of `somafm.py`:
+```python
+URL = "https://somafm.com/channels.json"
+PLAYLIST_PATH = Path.home() / "Music" / "Playlists" / "somaFM.pls"
+```
+
+## Notes
+
+- Selects the highest quality AAC stream per channel
+- Resolves SomaFM API playlist URLs to direct stream URLs
+- Compatible with MPD and any client that supports PLS format (e.g. rmpc)
