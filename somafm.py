@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# Script to gather somaFM channel lists *.pls (playlists)
+# with AAC quality (future version may make this configurable).
+# The resulting playlists can be used with an MPD/mpc (or rmpc!) setup
+
 import configparser
 import urllib.request
 import requests # https://requests.readthedocs.io
@@ -59,7 +64,7 @@ def write_pls(playlists: list[Playlist], output_path: Path) -> None:
         if stream_url and title:
             entries.append((stream_url, title))
 
-    file_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
     with open(output_path, 'w') as f:
         f.write('[playlist]\n')
         for i, (url, title) in enumerate(entries, start=1):
