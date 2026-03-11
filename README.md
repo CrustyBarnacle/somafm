@@ -1,8 +1,8 @@
 ## somafm.py - somaFM channel playlist generator for MPD
-
 # SomaFM MPD Playlist Generator
 
 Fetches SomaFM channel data and generates a PLS playlist for use with MPD.
+If you like this script, or it helps you with your own ideas, please support https://somafm.com/!
 
 ## Requirements
 
